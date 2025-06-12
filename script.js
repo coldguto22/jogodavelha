@@ -69,17 +69,56 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function aiMoveMacro() {
-        // IA básica: escolhe aleatoriamente entre todas as células livres dos micros abertos
+        // IA heurística: avalia jogadas considerando vitória/bloqueio no micro e no macro
         const options = [];
         macroBoard.forEach((micro, macroIdx) => {
             if (!micro.finished) {
                 micro.board.forEach((cell, microIdx) => {
-                    if (!cell) options.push({ macroIdx, microIdx });
+                    if (!cell) {
+                        let score = 0;
+                        // 1. Priorizar vencer o micro
+                        const tempMicro = micro.board.slice();
+                        tempMicro[microIdx] = 'O';
+                        let willWinMicro = false;
+                        if (checkWinner(tempMicro)) {
+                            score += 100;
+                            willWinMicro = true;
+                        }
+                        // 2. Bloquear o adversário no micro
+                        tempMicro[microIdx] = 'X';
+                        if (checkWinner(tempMicro)) score += 80;
+                        // 3. Evitar micros quase perdidos
+                        const xCount = micro.board.filter(v => v === 'X').length;
+                        const oCount = micro.board.filter(v => v === 'O').length;
+                        if (xCount - oCount >= 2) score -= 10;
+                        // 4. Priorizar vitória no macro
+                        // Simula o macro após vencer o micro
+                        let tempMacro = macroStatus.slice();
+                        if (willWinMicro) tempMacro[macroIdx] = 'O';
+                        if (checkWinner(tempMacro)) score += 1000;
+                        // 5. Priorizar formar linha/coluna/diagonal no macro
+                        // Conta quantos micros já vencidos pela IA em cada linha/coluna/diagonal
+                        const macroWinPatterns = [
+                            [0,1,2],[3,4,5],[6,7,8],
+                            [0,3,6],[1,4,7],[2,5,8],
+                            [0,4,8],[2,4,6]
+                        ];
+                        macroWinPatterns.forEach(pattern => {
+                            if (pattern.includes(macroIdx)) {
+                                const countO = pattern.filter(idx => (idx === macroIdx ? willWinMicro ? 'O' : macroStatus[idx] : macroStatus[idx]) === 'O').length;
+                                if (countO === 2) score += 50; // formar 2 em linha
+                            }
+                        });
+                        options.push({ macroIdx, microIdx, score });
+                    }
                 });
             }
         });
         if (options.length === 0) return;
-        const move = options[Math.floor(Math.random() * options.length)];
+        // Se houver jogada de vitória macro, faz; senão, escolhe melhor pontuada
+        const maxScore = Math.max(...options.map(o => o.score));
+        const bestMoves = options.filter(o => o.score === maxScore);
+        let move = bestMoves[Math.floor(Math.random() * bestMoves.length)];
         handleMicroCellClick(move.macroIdx, move.microIdx);
     }
 

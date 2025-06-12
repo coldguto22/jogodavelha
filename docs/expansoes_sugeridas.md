@@ -1,6 +1,6 @@
 # Expansões Sugeridas
 
-- Implementar IA mais sofisticada ou personalizada para o modo macro/micro
+- Implementar IA ainda mais sofisticada ou personalizada para o modo macro/micro (ex: aprendizado de máquina, Minimax adaptado)
 - Adicionar placar de vitórias/empates/derrotas
 - Permitir escolha de nomes e símbolos dos jogadores
 - Adicionar animações e efeitos visuais
