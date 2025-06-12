@@ -8,25 +8,43 @@ body {
 }
 #game-board {
     display: grid;
-    grid-template-columns: repeat(3, 60px);
-    grid-template-rows: repeat(3, 60px);
-    gap: 5px;
+    grid-template-columns: repeat(3, 70px);
+    grid-template-rows: repeat(3, 70px);
+    gap: 10px;
     margin-bottom: 20px;
 }
+.micro-board {
+    display: grid;
+    grid-template-columns: repeat(3, 22px);
+    grid-template-rows: repeat(3, 22px);
+    gap: 0;
+    background: #bbb;
+    border: 3px solid #333;
+    border-radius: 6px;
+    min-width: 66px;
+    min-height: 66px;
+    justify-items: center;
+    align-items: center;
+    position: relative;
+}
+.micro-board.finished {
+    opacity: 0.5;
+}
 .cell {
-    width: 60px;
-    height: 60px;
+    width: 22px;
+    height: 22px;
     background: #fff;
-    border: 1px solid #ccc;
-    font-size: 2em;
+    border: 1.5px solid #333;
+    font-size: 1.2em;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: background 0.2s;
+    box-sizing: border-box;
 }
 .cell:hover {
-    background: #e0e0e0;
+    background: #d0f0ff;
 }
 #game-status {
     margin-bottom: 10px;

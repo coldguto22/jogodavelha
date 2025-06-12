@@ -1,6 +1,6 @@
 # Expansões Sugeridas
 
-- Implementar o modo "Jogo da Velha 2.0": cada célula do tabuleiro principal é um jogo da velha 3x3, e o vencedor da célula micro define o valor da célula macro
+- Implementar IA mais sofisticada ou personalizada para o modo macro/micro
 - Adicionar placar de vitórias/empates/derrotas
 - Permitir escolha de nomes e símbolos dos jogadores
 - Adicionar animações e efeitos visuais
