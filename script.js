@@ -102,7 +102,12 @@ function checkWinner() {
 
 function restartGame() {
     board = Array(9).fill(null);
-    currentPlayer = 'X';
+    // Alterna o símbolo inicial a cada partida, mas X sempre começa
+    if (typeof restartGame.lastStarter === 'undefined') {
+        restartGame.lastStarter = 'O';
+    }
+    currentPlayer = restartGame.lastStarter === 'X' ? 'O' : 'X';
+    restartGame.lastStarter = currentPlayer;
     gameActive = true;
     statusElement.textContent = `Vez do jogador ${currentPlayer}`;
     renderBoard();
