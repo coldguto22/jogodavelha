@@ -22,6 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const microDiv = document.createElement('div');
             microDiv.className = 'micro-board';
             if (micro.finished) microDiv.classList.add('finished');
+            // Indicação visual do vencedor do micro
+            if (micro.finished && micro.winner && micro.winner !== 'E') {
+                const winnerSpan = document.createElement('span');
+                winnerSpan.className = 'macro-winner';
+                winnerSpan.textContent = micro.winner;
+                microDiv.appendChild(winnerSpan);
+            }
             micro.board.forEach((cell, microIdx) => {
                 const cellDiv = document.createElement('div');
                 cellDiv.className = 'cell';
