@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function aiMoveMacro() {
-        // IA heurística: avalia jogadas considerando vitória/bloqueio no micro e no macro
+        // IA heurística refinada: prioriza continuidade, linhas no macro e evita dispersão
         const options = [];
         macroBoard.forEach((micro, macroIdx) => {
             if (!micro.finished) {
@@ -98,13 +98,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         const xCount = micro.board.filter(v => v === 'X').length;
                         const oCount = micro.board.filter(v => v === 'O').length;
                         if (xCount - oCount >= 2) score -= 10;
-                        // 4. Priorizar vitória no macro
-                        // Simula o macro após vencer o micro
-                        let tempMacro = macroStatus.slice();
-                        if (willWinMicro) tempMacro[macroIdx] = 'O';
-                        if (checkWinner(tempMacro)) score += 1000;
-                        // 5. Priorizar formar linha/coluna/diagonal no macro
-                        // Conta quantos micros já vencidos pela IA em cada linha/coluna/diagonal
+                        // 4. Priorizar micros já iniciados pela IA
+                        if (oCount > 0) score += 20;
+                        // 5. Priorizar micros que contribuem para linha/coluna/diagonal no macro
                         const macroWinPatterns = [
                             [0,1,2],[3,4,5],[6,7,8],
                             [0,3,6],[1,4,7],[2,5,8],
@@ -112,10 +108,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         ];
                         macroWinPatterns.forEach(pattern => {
                             if (pattern.includes(macroIdx)) {
-                                const countO = pattern.filter(idx => (idx === macroIdx ? willWinMicro ? 'O' : macroStatus[idx] : macroStatus[idx]) === 'O').length;
-                                if (countO === 2) score += 50; // formar 2 em linha
+                                const countO = pattern.filter(idx => macroStatus[idx] === 'O').length;
+                                if (countO > 0) score += 30;
                             }
                         });
+                        // 6. Penalizar micros onde o adversário tem mais marcas
+                        if (xCount > oCount) score -= 10;
                         options.push({ macroIdx, microIdx, score });
                     }
                 });

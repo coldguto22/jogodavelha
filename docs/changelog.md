@@ -1,5 +1,8 @@
 # Changelog
 
+## [18/06/2025]
+- Refino da IA heurística: prioriza continuidade em micros já iniciados, formação de linhas no macro e evita dispersão
+
 ## [12/06/2025]
 - Criação do projeto base (HTML, CSS, JS)
 - Implementação do modo 2 jogadores
